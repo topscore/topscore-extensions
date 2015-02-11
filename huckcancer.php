@@ -134,7 +134,7 @@ while (true)
             'api_csrf' => $apiCsrf,
             'person_id' => $reg['person_id'],
             'is_price_variable' => $product['is_full_product'] && stripos($product['name'], 'custom') !== false,
-            'is_donated_amount_public' => $product['is_full_product']
+            'is_donated_amount_public' => true
           ]
         ])->json();
 
