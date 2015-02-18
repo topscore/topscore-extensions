@@ -63,7 +63,7 @@ while (true)
       'api' => 1,
       '_auth' => AUTH_KEY,
       'event_id' => 106689,
-      'status' => 'accepted',
+      'statuses' => 'accepted',
       'per_page' => 100,
       'page' => $page,
       'fields' => ['Person', 'Event']
