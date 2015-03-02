@@ -10,10 +10,10 @@ require_once __DIR__ . '/config.php';
 
 const API_DOMAIN = 'https://huckcancer.usetopscore.com';
 const PRIMARY_DOMAIN = 'http://www.earlyrecognitioniscritical.org';
-const REG_URL = API_DOMAIN . "/admin/registration";
-const NEW_PRODUCT_URL = API_DOMAIN . "/s/new-product";
-const EDIT_ATTRIBUTES_URL_TEMPLATE = API_DOMAIN . "/s/edit/PRODUCT_ID/donation";
-const SEND_MESSAGE_URL = API_DOMAIN . "/u/send-message";
+const REG_URL = API_DOMAIN . "/api/registrations";
+const NEW_PRODUCT_URL = API_DOMAIN . "/api/products/new";
+const EDIT_ATTRIBUTES_URL_TEMPLATE = API_DOMAIN . "/api/products/edit_donation_product_attributes";
+const SEND_MESSAGE_URL = API_DOMAIN . "/api/persons/send-message";
 
 const CREATED_REG_ID_FILE = __DIR__ . '/created';
 
@@ -125,13 +125,13 @@ while (true)
 
       foreach(array_merge([$newProductData['result']], $newProductData['result']['Family']) as $product)
       {
-        $url = str_replace('PRODUCT_ID', $product['id'], EDIT_ATTRIBUTES_URL_TEMPLATE);
-        $editAttributesData = $guzzle->get($url, [
+        $editAttributesData = $guzzle->get(EDIT_ATTRIBUTES_URL_TEMPLATE, [
           'verify' => false,
           'query' => [
             'api' => 1,
             '_auth' => AUTH_KEY,
             'api_csrf' => $apiCsrf,
+            'product_id' => $product['id'],
             'person_id' => $reg['person_id'],
             'is_price_variable' => $product['is_full_product'] && stripos($product['name'], 'custom') !== false,
             'is_donated_amount_public' => true
