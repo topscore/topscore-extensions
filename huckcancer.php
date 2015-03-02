@@ -95,10 +95,9 @@ while (true)
 
       var_export($reg);
 
-      $newProductData = $guzzle->get(NEW_PRODUCT_URL, [
+      $newProductData = $guzzle->post(NEW_PRODUCT_URL, [
         'verify' => false,
-        'query' => [
-          'api' => 1,
+        'body' => [
           '_auth' => AUTH_KEY,
           'api_csrf' => $apiCsrf,
   //        'site_id' => $reg['Event']['site_id'],
@@ -125,10 +124,9 @@ while (true)
 
       foreach(array_merge([$newProductData['result']], $newProductData['result']['Family']) as $product)
       {
-        $editAttributesData = $guzzle->get(EDIT_ATTRIBUTES_URL_TEMPLATE, [
+        $editAttributesData = $guzzle->post(EDIT_ATTRIBUTES_URL_TEMPLATE, [
           'verify' => false,
-          'query' => [
-            'api' => 1,
+          'body' => [
             '_auth' => AUTH_KEY,
             'api_csrf' => $apiCsrf,
             'product_id' => $product['id'],
@@ -151,10 +149,9 @@ while (true)
       $productUrl = PRIMARY_DOMAIN . '/s/' . $newProductData['result']['id'] . '/' . urlencode($newProductData['result']['name']);
 
       echo "Sending email \n";
-      $messageData = $guzzle->get(SEND_MESSAGE_URL, [
+      $messageData = $guzzle->post(SEND_MESSAGE_URL, [
         'verify' => false,
-        'query' => [
-          'api' => 1,
+        'body' => [
           '_auth' => AUTH_KEY,
           'api_csrf' => $apiCsrf,
           'recipient_id' => $reg['person_id'],
