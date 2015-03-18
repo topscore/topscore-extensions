@@ -95,6 +95,7 @@ while (true)
 
       var_export($reg);
 
+      try {
       $newProductData = $guzzle->post(NEW_PRODUCT_URL, [
         'verify' => false,
         'body' => [
@@ -103,11 +104,24 @@ while (true)
   //        'site_id' => $reg['Event']['site_id'],
           'organization_id' => $reg['Event']['organization_id'],
           'product_category_id' => 8, // donation
-          'name' => 'Donate to ' . $reg['Person']['full_name'],
+          'name' => 'Donate to ' . $reg['Person']['full_name'] . ' for ' . $reg['Event']['name'],
           'is_active' => 1,
           'enable_variations' => 1
         ]
       ])->json();
+      } catch (\GuzzleHttp\Exception\RequestException $re) {
+        if ($re && $re->getResponse())
+        {
+          $json = $re->getResponse()->json();
+          if ($json && isset($json['errors']) && isset($json['errors']['name']) && $json['errors']['name'] == 'A product with this name already exists.')
+          {
+            $createdIds[] = $reg['id'];
+            file_put_contents(CREATED_REG_ID_FILE, $reg['id']."\n", FILE_APPEND); // do it now because product is created now. if the rest fails, its ok we can just do it by hand.
+            continue;
+          }
+        }
+        throw $re;
+      }
 
       if ($newProductData === null || !is_array($newProductData) || $newProductData['success'] !== true)
       {
@@ -187,6 +201,7 @@ EOF
   }
   catch (\GuzzleHttp\Exception\RequestException $re)
   {
+    echo '1 ' . get_class($re) . "\n";
     echo $re->getRequest() . "\n";
     if ($re->hasResponse())
     {
@@ -196,6 +211,7 @@ EOF
   }
   catch (\GuzzleHttp\Exception\TransferException $e)
   {
+    echo '2 ' . get_class($e) . "\n";
     echo $e->getResponse() . "\n";
     exit(1);
   }
