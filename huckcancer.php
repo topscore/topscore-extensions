@@ -41,19 +41,14 @@ const CREATED_REG_ID_FILE = __DIR__ . '/created';
 
 function getApiCsrf()
 {
-  $csrfKey = AUTH_SECRET . '|' . floor(date('U') / 3600);
+  $clientId = AUTH_KEY;
+  $nonce = bin2hex(openssl_random_pseudo_bytes(12));
+  $timestamp = time();
+  $clientSecret = CSRF_KEY;
 
-  $td = mcrypt_module_open('rijndael-256', '', 'ecb', '');
-  $initializationVector = mcrypt_create_iv(mcrypt_enc_get_iv_size($td), MCRYPT_DEV_URANDOM);
-  $keySize = mcrypt_enc_get_key_size($td);
-  $mcryptKeySeed = CSRF_KEY;
-  $key = substr(md5($mcryptKeySeed), 0, $keySize);
-  mcrypt_generic_init($td, $key, $initializationVector);
+  $hmac = rtrim(strtr(base64_encode(hash_hmac('sha256', $clientId.$nonce.$timestamp, $clientSecret, true)), '+/', '-_'), '=');
 
-  $encrypted = mcrypt_generic($td, $csrfKey);
-
-  mcrypt_generic_deinit($td);
-  mcrypt_module_close($td);
+  $encrypted = join('|', [$nonce,$timestamp,$hmac]);
 
   return rtrim(strtr(base64_encode($encrypted), '+/', '-_'), '=');
 }
