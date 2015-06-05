@@ -1,6 +1,27 @@
 #!/usr/bin/env php
 <?php
 
+ini_set('display_errors', 'on');
+error_reporting(E_ALL | E_STRICT);
+
+set_error_handler(function ($type, $message, $file = null, $line = null, $context = null) {
+  $errorConstants = [
+    'E_ERROR','E_WARNING','E_PARSE','E_NOTICE','E_CORE_ERROR','E_CORE_WARNING',
+    'E_COMPILE_ERROR','E_COMPILE_WARNING','E_USER_ERROR','E_USER_WARNING','E_USER_NOTICE',
+    'E_STRICT','E_RECOVERABLE_ERROR','E_DEPRECATED','E_USER_DEPRECATED','E_ALL'
+  ];
+
+  $errorName = 'E_UNKNOWN('.$type.')';
+  foreach($errorConstants as $constant) {
+    if ($type == constant($constant)) { 
+      $errorName = $constant;
+      break;
+    }
+  }
+  throw new ErrorException($errorName.': '.$message, $type, 0, $file, $line);
+});
+
+
 chdir(__DIR__);
 
 require_once __DIR__ . '/vendor/autoload.php';
