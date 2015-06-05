@@ -67,6 +67,18 @@ if (file_exists(CREATED_REG_ID_FILE))
   $createdIds = (array) array_filter(explode("\n", file_get_contents(CREATED_REG_ID_FILE)));
 }
 
+
+doEvent(106689, $guzzle, $apiCsrf, $createdIds); // dallas
+doEvent(107035, $guzzle, $apiCsrf, $createdIds); // colorado
+
+
+
+
+function doEvent($eventId, $guzzle, $apiCsrf, &$createdIds) {
+
+echo "Doing event $eventId\n";
+
+
 $count = 0;
 $page = 1;
 
@@ -78,7 +90,7 @@ while (true)
     'query' => [
       'api' => 1,
       '_auth' => AUTH_KEY,
-      'event_id' => 106689,
+      'event_id' => $eventId,
       'statuses' => 'accepted',
       'per_page' => 100,
       'page' => $page,
@@ -86,7 +98,7 @@ while (true)
     ]
   ])->json();
 
-  if ($registrationData === null || !is_array($registrationData) || $registrationData['success'] !== true)
+  if ($registrationData === null || !is_array($registrationData) || $registrationData['status'] !== 200)
   {
     echo "Could not get reg data\n";
     var_export($registrationData);
@@ -139,7 +151,7 @@ while (true)
         throw $re;
       }
 
-      if ($newProductData === null || !is_array($newProductData) || $newProductData['success'] !== true)
+      if ($newProductData === null || !is_array($newProductData) || $newProductData['status'] !== 200)
       {
         echo "Creating new product failed.\n";
         var_export($newProductData);
@@ -161,12 +173,13 @@ while (true)
             'api_csrf' => $apiCsrf,
             'product_id' => $product['id'],
             'person_id' => $reg['person_id'],
+//     'event_id' => $reg['event_id'],
             'is_price_variable' => $product['is_full_product'] && stripos($product['name'], 'custom') !== false,
             'is_donated_amount_public' => true
           ]
         ])->json();
 
-        if ($editAttributesData === null || !is_array($editAttributesData) || $editAttributesData['success'] !== true)
+        if ($editAttributesData === null || !is_array($editAttributesData) || $editAttributesData['status'] !== 200)
         {
           echo "Editing dontaion attributes failed.\n";
           var_export($editAttributesData);
@@ -199,15 +212,12 @@ You can personalize your fundraising page so donors can easily donate to you! He
   as the vehicle to teach kids about early cancer detection and body awareness. We sponsor and run Clinics across the country in middle school P.E.
   classes and are fundraising for supplies for the Clinics, as well as other programs to promote early cancer detection.<br>
 <br>
-Remember, this is a fundraiser tournament so you're required to raise $50! If you ask five people to donate $10, you've earned it.<br>
-<br>
-If you don't meet your requirement, we will ask for the balance of $50 on the day of the tournament at check-in.
-Help us spread the message of early cancer prevention to kids across the country!<br>
+Remember, this is a fundraiser tournament so you're encouraged to raise $50! If you ask five people to donate $10, you've earned it. Help us spread the message of early cancer prevention to kids across the country!<br>
 EOF
         ]
       ])->json();
 
-      if ($messageData === null || !is_array($messageData) || $messageData['success'] !== true)
+      if ($messageData === null || !is_array($messageData) || $messageData['status'] !== 200)
       {
         echo "Sending message to " . $reg['person_id'] . "failed\n";
         var_export($messageData);
@@ -239,4 +249,8 @@ EOF
   }
   $page++;
 }
+
+
+}
+
 exit(0);
