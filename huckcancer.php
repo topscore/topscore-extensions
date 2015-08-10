@@ -44,7 +44,7 @@ function getApiCsrf()
   $clientId = AUTH_KEY;
   $nonce = bin2hex(openssl_random_pseudo_bytes(12));
   $timestamp = time();
-  $clientSecret = CSRF_KEY;
+  $clientSecret = AUTH_SECRET;
 
   $hmac = rtrim(strtr(base64_encode(hash_hmac('sha256', $clientId.$nonce.$timestamp, $clientSecret, true)), '+/', '-_'), '=');
 
@@ -89,7 +89,7 @@ while (true)
     'verify' => false,
     'query' => [
       'api' => 1,
-      '_auth' => AUTH_KEY,
+      'auth_token' => AUTH_KEY,
       'event_id' => $eventId,
       'statuses' => 'accepted',
       'per_page' => 100,
@@ -127,7 +127,7 @@ while (true)
       $newProductData = $guzzle->post(NEW_PRODUCT_URL, [
         'verify' => false,
         'body' => [
-          '_auth' => AUTH_KEY,
+          'auth_token' => AUTH_KEY,
           'api_csrf' => $apiCsrf,
   //        'site_id' => $reg['Event']['site_id'],
           'organization_id' => $reg['Event']['organization_id'],
@@ -169,7 +169,7 @@ while (true)
         $editAttributesData = $guzzle->post(EDIT_ATTRIBUTES_URL_TEMPLATE, [
           'verify' => false,
           'body' => [
-            '_auth' => AUTH_KEY,
+            'auth_token' => AUTH_KEY,
             'api_csrf' => $apiCsrf,
             'product_id' => $product['id'],
             'person_id' => $reg['person_id'],
@@ -195,7 +195,7 @@ while (true)
       $messageData = $guzzle->post(SEND_MESSAGE_URL, [
         'verify' => false,
         'body' => [
-          '_auth' => AUTH_KEY,
+          'auth_token' => AUTH_KEY,
           'api_csrf' => $apiCsrf,
           'recipient_id' => $reg['person_id'],
           'message' => <<<EOF
