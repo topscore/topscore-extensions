@@ -68,8 +68,8 @@ if (file_exists(CREATED_REG_ID_FILE))
 }
 
 
-doEvent(106689, $guzzle, $apiCsrf, $createdIds); // dallas 2015
-doEvent(107035, $guzzle, $apiCsrf, $createdIds); // colorado 2015
+//doEvent(106689, $guzzle, $apiCsrf, $createdIds); // dallas 2015
+//doEvent(107035, $guzzle, $apiCsrf, $createdIds); // colorado 2015
 doEvent(117094, $guzzle, $apiCsrf, $createdIds); // san diego 2015
 
 
