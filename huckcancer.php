@@ -212,6 +212,9 @@ You can personalize your fundraising page so donors can easily donate to you! He
 - Some facts about E.R.I.C. to help - Early Recognition Is Critical are a non-profit so all donations are tax-deductible. We use Ultimate Frisbee
   as the vehicle to teach kids about early cancer detection and body awareness. We sponsor and run Clinics across the country in middle school P.E.
   classes and are fundraising for supplies for the Clinics, as well as other programs to promote early cancer detection.<br>
+- Huck Cancer San Diego will also benefit The Seany Foundation.  Founded in San Diego, The Seany Foundation focused much of its early efforts on 
+  raising money to fund cutting-edge cancer research at local institutions.  Today, the non-profit focuses heavily on bringing relief and happiness 
+  to kids struggling with cancer and to their families, particularly siblings. <a href="http://www.theseanyfoundation.org">www.theseanyfoundation.org</a>.<br>
 <br>
 Remember, this is a fundraiser tournament so you're encouraged to raise $50! If you ask five people to donate $10, you've earned it. Help us spread the message of early cancer prevention to kids across the country!<br>
 EOF
