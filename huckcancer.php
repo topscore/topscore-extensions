@@ -174,7 +174,7 @@ while (true)
             'api_csrf' => $apiCsrf,
             'product_id' => $product['id'],
             'person_id' => $reg['person_id'],
-//     'event_id' => $reg['event_id'],
+            'event_id' => $reg['event_id'],
 //            'is_price_variable' => $product['is_full_product'] && !$product['cost'],
             'is_donated_amount_public' => true
           ]
