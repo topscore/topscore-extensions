@@ -165,7 +165,7 @@ while (true)
 
       var_export($newProductData);
 
-      foreach(array_merge([$newProductData['result']], $newProductData['result']['Family']) as $product)
+      foreach(array_merge([$newProductData['result'][0]], $newProductData['result'][0]['Family']) as $product)
       {
         $editAttributesData = $guzzle->post(EDIT_ATTRIBUTES_URL_TEMPLATE, [
           'verify' => false,
@@ -190,7 +190,7 @@ while (true)
         var_export($editAttributesData);
       }
 
-      $productUrl = PRIMARY_DOMAIN . '/s/' . $newProductData['result']['id'] . '/' . urlencode($newProductData['result']['name']);
+      $productUrl = PRIMARY_DOMAIN . '/s/' . $newProductData['result'][0]['id'] . '/' . urlencode($newProductData['result'][0]['name']);
 
       echo "Sending email \n";
       $messageData = $guzzle->post(SEND_MESSAGE_URL, [
